@@ -29,7 +29,7 @@ class SQRT
     log "Simple QR Toolkit"
     credits
     log "Converting text  : #{@text}"
-    log "Destination file : #{@file}_qr.png"
+    log "Destination file : #{@file}"
     log "\n"
   end
 
@@ -50,8 +50,8 @@ class SQRT
     banner
     if proceed?
       code = @text.gsub(" ", "+")
-      `curl --silent -d "cht=qr&chs=64x64&chl=#{code}&chld=L|0" "http://chart.apis.google.com/chart" > "#{@file}_qr.png"`
-      `open #{@file}_qr.png` unless @mute
+      `curl --silent -d "cht=qr&chs=64x64&chl=#{code}&chld=L|0" "http://chart.apis.google.com/chart" > "#{@file}"`
+      `open "#{@file}"` unless @mute
     else
       log "QR Code generation aborted!\n"
     end
