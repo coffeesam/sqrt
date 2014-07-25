@@ -28,32 +28,52 @@ class SQRT
     log "\n"
     log "Simple QR Toolkit"
     credits
-    log "Converting text  : #{@text}"
-    log "Destination file : #{@file}"
-    log "\n"
+    show_usage if empty_args?
+  end
+
+  def show_usage
+    log "usage: ./sqrt text outpath [--auto] [--quiet]"
+    log "\n\n"
+    log "  text      : text to encode in QR code"
+    log "  output    : output path to write PNG image to"
+    log "\n\n"
+    log "  OPTIONS"
+    log "    --auto  : proceed to generate QR code without prompt"
+    log "    --quiet : suppress sending messages to stdout"
+    log "\n\n"
   end
 
   def log(message)
     puts message unless @mute
   end
 
+  def empty_args?
+    @text.nil? || @file.nil?
+  end
+
   def proceed?
-    unless @auto
-      print "Are you sure? [y/n] "
-      input = STDIN.getch
-      log "\n\n"
+    unless empty_args?
+      log "Converting text  : #{@text}"
+      log "Destination file : #{@file}"
+      log "\n"
+      unless @auto
+        print "Are you sure? [y/n] "
+        input = STDIN.getch
+        log "\n\n"
+      end
+      @auto || input.match(/y/i)
     end
-    @auto || input.match(/y/i)
   end
 
   def to_qrcode
     banner
+
     if proceed?
       code = @text.gsub(" ", "+")
       `curl --silent -d "cht=qr&chs=64x64&chl=#{code}&chld=L|0" "http://chart.apis.google.com/chart" > "#{@file}"`
       `open "#{@file}"` unless @mute
     else
-      log "QR Code generation aborted!\n"
+      #log "QR Code generation aborted!\n"
     end
   end
 end
