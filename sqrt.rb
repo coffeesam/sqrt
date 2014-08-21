@@ -11,8 +11,8 @@ class SQRT
   ]
 
   def initialize(args)
-    @text = args[0]
-    @file = args[1]
+    @text = args[0].upcase
+    @file = args[1] || "./output/#{@text.downcase.gsub(/-|\s/, '_')}_qr.png"
     @auto = args.include?("--auto")
     @mute = args.include?("--quiet")
     self
@@ -48,7 +48,7 @@ class SQRT
   end
 
   def empty_args?
-    @text.nil? || @file.nil?
+    @text.nil?
   end
 
   def proceed?
@@ -70,7 +70,14 @@ class SQRT
 
     if proceed?
       code = @text.gsub(" ", "+")
-      `curl --silent -d "cht=qr&chs=64x64&chl=#{code}&chld=L|0" "http://chart.apis.google.com/chart" > "#{@file}"`
+      correction_level = if code.size < 19
+        "H"
+      elsif code.size < 38
+        "M"
+      else
+        "L"
+      end
+      `curl --silent -d "cht=qr&chs=64x64&chl=#{code}&chld=#{correction_level}|0" "http://chart.apis.google.com/chart" > "#{@file}"`
       `open "#{@file}"` unless @mute
     else
       #log "QR Code generation aborted!\n"
