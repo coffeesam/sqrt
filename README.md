@@ -8,8 +8,8 @@ usage: ./sqrt text outpath [--auto] [--quiet]
   output     : output path to write PNG image to
 
   OPTIONS
-  
-    --auto   : proceed to generate QR code without prompt    
+
+    --auto   : proceed to generate QR code without prompt
     --quiet  : suppress sending messages to stdout
 
 ```
