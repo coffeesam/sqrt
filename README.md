@@ -14,5 +14,7 @@ usage: ./sqrt text outpath [--auto] [--quiet]
 
 ```
 
+Default output will be store at `./output` folder
+
 ##License
 Copyright © 2014 Hon Kong Lum. This code is released under [MIT License](https://github.com/coffeesam/sqrt/blob/master/LICENSE).
